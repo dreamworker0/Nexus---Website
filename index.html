@@ -39,18 +39,31 @@
         100% { transform: scale(1.2); opacity: 0.5; }
       }
     </style>
-  <script type="importmap">
-{
-  "imports": {
-    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
-    "lucide-react": "https://aistudiocdn.com/lucide-react@^0.554.0",
-    "react/": "https://aistudiocdn.com/react@^19.2.0/",
-    "react": "https://aistudiocdn.com/react@^19.2.0"
-  }
-}
-</script>
-</head>
+    <script>
+      // Netlify Overlay 등 외부 스크립트 충돌 방지 (customElements 중복 정의 에러 방어)
+      const originalDefine = customElements.define;
+      customElements.define = function(name, constructor, options) {
+        if (!customElements.get(name)) {
+          originalDefine.call(customElements, name, constructor, options);
+        } else {
+          console.warn(`Custom element '${name}' has already been defined. Ignoring duplicate definition.`);
+        }
+      };
+    </script>
+    <script type="importmap">
+    {
+      "imports": {
+        "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+        "lucide-react": "https://aistudiocdn.com/lucide-react@^0.554.0",
+        "react/": "https://aistudiocdn.com/react@^19.2.0/",
+        "react": "https://aistudiocdn.com/react@^19.2.0"
+      }
+    }
+    </script>
+  </head>
   <body class="bg-slate-950 text-white antialiased overflow-x-hidden selection:bg-fuchsia-500 selection:text-white">
     <div id="root"></div>
+    <!-- 메인 앱 엔트리 포인트 추가 -->
+    <script type="module" src="/index.tsx"></script>
   </body>
 </html>
